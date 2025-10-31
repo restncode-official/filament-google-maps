@@ -6,6 +6,7 @@ use Cheesegrits\FilamentGoogleMaps\Widgets\MapTableWidget;
 use Cheesegrits\FilamentGoogleMaps\Widgets\MapWidget;
 use Filament\Support\Assets\AlpineComponent;
 use Filament\Support\Assets\AssetManager;
+use Filament\Support\Assets\Css;
 use Filament\Support\Facades\FilamentAsset;
 use Spatie\LaravelPackageTools\Package;
 use Spatie\LaravelPackageTools\PackageServiceProvider;
@@ -44,7 +45,7 @@ class FilamentGoogleMapsServiceProvider extends PackageServiceProvider
         foreach ($commands as $command) {
             $class = 'Cheesegrits\\FilamentGoogleMaps\\Commands\\Aliases\\' . class_basename($command);
 
-            if (! class_exists($class)) {
+            if (!class_exists($class)) {
                 continue;
             }
 
@@ -59,6 +60,7 @@ class FilamentGoogleMapsServiceProvider extends PackageServiceProvider
         $this->mergeConfigFrom(__DIR__ . '/../config/filament-google-maps.php', 'filament-google-maps');
         $this->app->resolving(AssetManager::class, function () {
             FilamentAsset::register([
+                Css::make('filament-google-maps-css', __DIR__ . '/../dist/cheesegrits/filament-google-maps/filament-google-maps.css'),
                 AlpineComponent::make('filament-google-maps-geocomplete', __DIR__ . '/../dist/cheesegrits/filament-google-maps/filament-google-geocomplete.js'),
                 AlpineComponent::make('filament-google-maps-field', __DIR__ . '/../dist/cheesegrits/filament-google-maps/filament-google-maps.js'),
                 AlpineComponent::make('filament-google-maps-widget', __DIR__ . '/../dist/cheesegrits/filament-google-maps/filament-google-maps-widget.js'),
