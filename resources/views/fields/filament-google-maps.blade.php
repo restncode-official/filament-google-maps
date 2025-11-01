@@ -55,6 +55,7 @@
                     circleOptions: @js($getCircleOptions()),
                     rectangleOptions: @js($getRectangleOptions()),
                     mapType: @js($getType()),
+                    afterInitJs: @js($getAfterInitJs()),
                 })"
         id="{{ $getId() . '-alpine' }}"
         wire:ignore

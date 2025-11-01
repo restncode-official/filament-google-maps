@@ -71,6 +71,7 @@ export default function filamentGoogleMapsField({
   hasReverseGeocodeUsing = false,
   hasPlaceUpdatedUsing = false,
   mapType = 'roadmap',
+  afterInitJs = null,
 }) {
   return {
     state,
@@ -402,6 +403,21 @@ export default function filamentGoogleMapsField({
         }
       }
 
+      // Add a custom Clear Shapes control when drawing is enabled
+      if (drawingControl) {
+        const clearButton = document.createElement("button");
+        clearButton.textContent = "Clear";
+        clearButton.classList.add("custom-map-control-button");
+        this.map.controls[google.maps.ControlPosition.TOP_CENTER].push(
+          clearButton
+        );
+
+        clearButton.addEventListener("click", (e) => {
+          e.preventDefault();
+          this.clearDrawings();
+        });
+      }
+
       this.$watch("state", () => {
         if (this.state === undefined) {
           return;
@@ -420,6 +436,16 @@ export default function filamentGoogleMapsField({
           this.updateMap(location);
         }
       });
+
+      // Execute custom JavaScript after map initialization
+      if (afterInitJs) {
+        try {
+          const customFunction = new Function('map', 'marker', 'drawingManager', afterInitJs);
+          customFunction(this.map, this.marker, this.drawingManager);
+        } catch (error) {
+          console.error('Error executing afterInitJs:', error);
+        }
+      }
     },
     markerMoved: function (event) {
       this.geoJsonContains(event.latLng);
@@ -857,6 +883,37 @@ export default function filamentGoogleMapsField({
         this.dataLayer.toGeoJson((obj) => {
           setStateUsing(drawingField, JSON.stringify(obj));
         });
+      }
+    },
+
+    clearDrawings: function () {
+      // Remove overlays from map
+      if (Array.isArray(this.overlays) && this.overlays.length > 0) {
+        this.overlays.forEach((overlay) => {
+          try {
+            overlay.setMap(null);
+          } catch (e) {}
+        });
+        this.overlays = [];
+      }
+
+      // Clear data layer features and update state
+      if (this.dataLayer) {
+        const toRemove = [];
+        this.dataLayer.forEach((feature) => toRemove.push(feature));
+        toRemove.forEach((feature) => this.dataLayer.remove(feature));
+
+        // Ensure selection is cleared and state updated
+        this.clearSelection();
+        if (drawingField) {
+          this.drawingModified();
+        }
+      } else if (drawingField) {
+        // If no dataLayer yet, still clear the bound state
+        setStateUsing(
+          drawingField,
+          JSON.stringify({ type: "FeatureCollection", features: [] })
+        );
       }
     },
 
