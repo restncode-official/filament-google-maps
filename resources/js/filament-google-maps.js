@@ -440,10 +440,21 @@ export default function filamentGoogleMapsField({
       // Execute custom JavaScript after map initialization
       if (afterInitJs) {
         try {
-          const customFunction = new Function('map', 'marker', 'drawingManager', afterInitJs);
-          customFunction(this.map, this.marker, this.drawingManager);
+          const customFunction = new Function(
+            "map",
+            "marker",
+            "drawingManager",
+            "getOverlays",
+            afterInitJs
+          );
+          customFunction(
+            this.map,
+            this.marker,
+            this.drawingManager,
+            () => this.overlays
+          );
         } catch (error) {
-          console.error('Error executing afterInitJs:', error);
+          console.error("Error executing afterInitJs:", error);
         }
       }
     },
