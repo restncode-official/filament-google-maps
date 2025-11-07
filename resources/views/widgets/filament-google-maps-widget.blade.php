@@ -40,9 +40,11 @@
             {!! ($pollingInterval = $this->getPollingInterval()) ? "wire:poll.{$pollingInterval}=\"updateMapData\"" : '' !!}
         >
             <div
+                {{-- Following will refresh the whole map, clearing everything on every load. So we put our data checksum --}}
+                wire:key="{{ $this->dataChecksum }}"
                 x-ignore
-                ax-load
-                ax-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('filament-google-maps-widget', 'cheesegrits/filament-google-maps') }}"
+                x-load
+                x-load-src="{{ \Filament\Support\Facades\FilamentAsset::getAlpineComponentSrc('filament-google-maps-widget', 'cheesegrits/filament-google-maps') }}"
                 x-data="filamentGoogleMapsWidget({
                             cachedData: {{ json_encode($this->getCachedData()) }},
                             config: {{ $this->getMapConfig() }},
@@ -54,6 +56,8 @@
                 @endif
             >
                 <div
+                    wire:ignore
+                    id="map-{{ $this->getMapId() }}"
                     x-ref="map"
                     class="w-full"
                     style="

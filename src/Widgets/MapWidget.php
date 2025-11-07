@@ -194,9 +194,9 @@ class MapWidget extends Widget implements HasActions, HasForms
         if ($newDataChecksum !== $this->dataChecksum) {
             $this->dataChecksum = $newDataChecksum;
 
-            $this->dispatch('updateMapData', [
+            $this->dispatch('fgm:updateMapData', [
                 'data' => $this->getCachedData(),
-            ])->self();
+            ]);
         }
     }
 
@@ -207,9 +207,9 @@ class MapWidget extends Widget implements HasActions, HasForms
         if ($newDataChecksum !== $this->dataChecksum) {
             $this->dataChecksum = $newDataChecksum;
 
-            $this->dispatch('filterChartData', [
+            $this->dispatch('fgm:filterChartData', [
                 'data' => $this->getCachedData(),
-            ])->self();
+            ]);
         }
     }
 

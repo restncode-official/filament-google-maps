@@ -10,7 +10,7 @@ class {{ class }} extends MapWidget
 
     protected static ?int $sort = 1;
 
-    protected static ?string $pollingInterval = null;
+    protected ?string $pollingInterval = null;
 
     protected static ?bool $clustering = true;
 
@@ -24,7 +24,7 @@ class {{ class }} extends MapWidget
     	 * You can use whatever query you want here, as long as it produces a set of records with your
     	 * lat and lng fields in them.
     	 */
-        $locations = {{ model }}::all()->limit(500);
+        $locations = {{ model }}::limit(500)->get();
 
         $data = [];
 
@@ -45,7 +45,7 @@ class {{ class }} extends MapWidget
                 ],
 
                 'label'     => $location->{{ lat }} . ',' . $location->{{ lng }},
-                
+
                 'id' => $location->getKey(),
 
 				/**

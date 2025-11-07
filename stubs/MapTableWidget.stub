@@ -14,7 +14,7 @@ class {{ class }} extends MapTableWidget
 
 	protected static ?int $sort = 1;
 
-	protected static ?string $pollingInterval = null;
+	protected ?string $pollingInterval = null;
 
 	protected static ?bool $clustering = true;
 

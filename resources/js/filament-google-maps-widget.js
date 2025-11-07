@@ -105,6 +105,23 @@ export default function filamentGoogleMapsWidget({
 
       this.idle();
 
+      // (...args) does not work, for livewire events
+      Livewire.on("fgm:updateMapData", (args) => {
+        if (!Array.isArray(args) || args.length === 0) {
+          return;
+        }
+
+        const payload = args[0];
+
+        if (!payload || !Object.prototype.hasOwnProperty.call(payload, "data")) {
+          return;
+        }
+
+        const markersData = JSON.parse(JSON.stringify(payload.data));
+
+        this.update(markersData);
+      });
+
       window.addEventListener(
         "filament-google-maps::widget/setMapCenter",
         (event) => {
@@ -172,12 +189,17 @@ export default function filamentGoogleMapsWidget({
       return marker;
     },
     createMarkers: function () {
+      this.modelIds = [];
+
       this.markers = this.data.map((location) => {
         const marker = this.createMarker(location);
-        marker.setMap(this.map);
+
+        if (!this.config.clustering) {
+          marker.setMap(this.map);
+        }
 
         if (this.config.markerAction) {
-          google.maps.event.addListener(marker, "click", (event) => {
+          google.maps.event.addListener(marker, "click", () => {
             this.$wire.mountAction(this.config.markerAction, {
               model_id: marker.model_id,
             });
@@ -191,62 +213,12 @@ export default function filamentGoogleMapsWidget({
       marker.setMap(null);
     },
     removeMarkers: function () {
-      for (let i = 0; i < this.markers.length; i++) {
-        this.markers[i].setMap(null);
+      for (const marker of this.markers) {
+        marker.setMap(null);
       }
 
       this.markers = [];
-    },
-    mergeMarkers: function () {
-      const operation = (list1, list2, isUnion = false) =>
-        list1.filter(
-          (a) =>
-            isUnion ===
-            list2.some(
-              (b) =>
-                a.getPosition().lat() === b.getPosition().lat() &&
-                a.getPosition().lng() === b.getPosition().lng()
-            )
-        );
-
-      const inBoth = (list1, list2) => operation(list1, list2, true),
-        inFirstOnly = operation,
-        inSecondOnly = (list1, list2) => inFirstOnly(list2, list1);
-
-      const newMarkers = this.data.map((location) => {
-        let marker = this.createMarker(location);
-        marker.addListener("click", () => {
-          this.infoWindow.setContent(location.label);
-          this.infoWindow.open(this.map, marker);
-        });
-
-        return marker;
-      });
-
-      if (!this.config.mapIsFilter) {
-        const oldMarkersRemove = inSecondOnly(newMarkers, this.markers);
-
-        for (let i = oldMarkersRemove.length - 1; i >= 0; i--) {
-          oldMarkersRemove[i].setMap(null);
-          const index = this.markers.findIndex(
-            (marker) =>
-              marker.getPosition().lat() ===
-                oldMarkersRemove[i].getPosition().lat() &&
-              marker.getPosition().lng() ===
-                oldMarkersRemove[i].getPosition().lng()
-          );
-          this.markers.splice(index, 1);
-        }
-      }
-
-      const newMarkersCreate = inSecondOnly(this.markers, newMarkers);
-
-      for (let i = 0; i < newMarkersCreate.length; i++) {
-        newMarkersCreate[i].setMap(this.map);
-        this.markers.push(newMarkersCreate[i]);
-      }
-
-      this.fitToBounds();
+      this.modelIds = [];
     },
     fitToBounds: function (force = false) {
       if (
@@ -264,19 +236,28 @@ export default function filamentGoogleMapsWidget({
       }
     },
     createClustering: function () {
-      if (this.markers.length > 0 && this.config.clustering) {
-        // use default algorithm and renderer
-        this.clusterer = new MarkerClusterer({
-          map: this.map,
-          markers: this.markers,
-        });
+      if (!this.config.clustering || this.markers.length === 0) {
+        return;
       }
+
+      this.destroyClusterer();
+
+      this.clusterer = new MarkerClusterer({
+        map: this.map,
+        markers: this.markers,
+      });
     },
     updateClustering: function () {
-      if (this.config.clustering) {
-        this.clusterer.clearMarkers();
-        this.clusterer.addMarkers(this.markers);
+      if (!this.config.clustering) {
+        return;
       }
+
+      if (this.markers.length === 0) {
+        this.destroyClusterer();
+        return;
+      }
+
+      this.createClustering();
     },
     moved: function () {
       function areEqual(array1, array2) {
@@ -293,17 +274,14 @@ export default function filamentGoogleMapsWidget({
         return false;
       }
 
-      console.log("moved");
-
       const bounds = this.map.getBounds();
       const visible = this.markers.filter((marker) => {
         return bounds.contains(marker.getPosition());
       });
-      const ids = visible.map((marker) => marker.model_id);
+      const ids = JSON.parse(JSON.stringify(visible.map((marker) => marker.model_id)));
 
       if (!areEqual(this.modelIds, ids)) {
         this.modelIds = ids;
-        console.log(ids);
         this.$wire.set("mapFilterIds", ids);
       }
     },
@@ -335,11 +313,27 @@ export default function filamentGoogleMapsWidget({
         });
       }
     },
+    destroyClusterer: function () {
+      if (!this.clusterer) {
+        return;
+      }
+
+      this.clusterer.clearMarkers();
+      this.clusterer.setMap(null);
+      this.clusterer = null;
+    },
     update: function (data) {
-      this.data = data;
-      this.mergeMarkers();
+      this.data = Array.isArray(data) ? data : [];
+
+      this.destroyClusterer();
+
+      this.removeMarkers();
+
+      this.createMarkers();
+
       this.updateClustering();
-      this.show();
+
+      this.show(true);
     },
     recenter: function (data) {
       this.map.panTo({ lat: data.lat, lng: data.lng });
