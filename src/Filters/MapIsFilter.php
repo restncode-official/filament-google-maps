@@ -57,7 +57,7 @@ class MapIsFilter extends BaseFilter
         return $query;
     }
 
-    public function getFormSchema(): array
+    public function getSchemaComponents(): array
     {
         $form = [];
 

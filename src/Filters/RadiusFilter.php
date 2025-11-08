@@ -33,7 +33,7 @@ class RadiusFilter extends BaseFilter
 
     public function getColumns(): array|int|null
     {
-        return 4;
+        return 2;
     }
 
     protected function setUp(): void
@@ -99,32 +99,35 @@ class RadiusFilter extends BaseFilter
         return $query;
     }
 
-    public function getFormSchema(): array
+    public function getSchemaComponents(): array
     {
+        // dd($this->getName());
         $form = [
             Group::make()->schema([
                 Geocomplete::make('geocomplete')
                     ->label(__('filament-google-maps::fgm.radius_filter.address'))
                     ->filterName($this->getName())
                     ->lazy(),
-                Group::make()->schema([
-                    TextInput::make('radius')
-                        ->label(__('filament-google-maps::fgm.radius_filter.distance'))
-                        ->numeric()
-                        ->default($this->getRadius() ?? 10)
-                        ->lazy(),
-                    Select::make('unit')
-                        ->label(__('filament-google-maps::fgm.radius_filter.unit'))
-                        ->options([
-                            'mi' => __('filament-google-maps::fgm.radius_filter.miles'),
-                            'km' => __('filament-google-maps::fgm.radius_filter.kilometers'),
-                        ])
-                        ->default(
-                            $this->getKilometers() ? 'km' : 'mi'
-                        )
-                        ->visible(fn () => $this->getSelectUnit()),
-                ])
-                    ->columns($this->getSelectUnit() ? 2 : 1),
+
+                Group::make()
+                    ->columns($this->getSelectUnit() ? 2 : 1)
+                    ->schema([
+                        TextInput::make('radius')
+                            ->label(__('filament-google-maps::fgm.radius_filter.distance'))
+                            ->numeric()
+                            ->default($this->getRadius() ?? 10)
+                            ->lazy(),
+                        Select::make('unit')
+                            ->label(__('filament-google-maps::fgm.radius_filter.unit'))
+                            ->options([
+                                'mi' => __('filament-google-maps::fgm.radius_filter.miles'),
+                                'km' => __('filament-google-maps::fgm.radius_filter.kilometers'),
+                            ])
+                            ->default(
+                                $this->getKilometers() ? 'km' : 'mi'
+                            )
+                            ->visible(fn() => $this->getSelectUnit()),
+                    ]),
                 Group::make()->schema([
                     Hidden::make('latitude'),
                     Hidden::make('longitude'),

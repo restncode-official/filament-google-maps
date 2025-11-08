@@ -567,6 +567,7 @@ export default function filamentGoogleMapsField({
     },
     setCoordinates: function (position) {
       this.state = position;
+      console.log("Setting state for " + statePath + " to ", this.state);
     },
     getCoordinates: function () {
       if (this.state === null || !this.state.hasOwnProperty("lat")) {
