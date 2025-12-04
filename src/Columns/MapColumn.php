@@ -63,7 +63,7 @@ class MapColumn extends Column
     {
         $type = $this->evaluate($this->type);
 
-        if (! in_array($type, ['satellite', 'hybrid', 'roadmap', 'terrain'])) {
+        if (!in_array($type, ['satellite', 'hybrid', 'roadmap', 'terrain'])) {
             $type = 'roadmap';
         }
 
@@ -231,10 +231,10 @@ class MapColumn extends Column
     {
         $cacheKey = 'fgm-' . md5($url);
 
-        if (! Cache::has($cacheKey)) {
+        if (!Cache::has($cacheKey)) {
             $map = file_get_contents($url);
 
-            $store    = config('filament-google-maps.cache.store', null);
+            $store = config('filament-google-maps.cache.store', null);
             $duration = config('filament-google-maps.cache.duration', 0);
 
             if ($map) {

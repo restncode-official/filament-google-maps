@@ -2,13 +2,13 @@
 
 return [
     'radius_filter' => [
-        'address'    => 'Address',
-        'miles'      => 'Miles',
+        'address' => 'Address',
+        'miles' => 'Miles',
         'kilometers' => 'Kilometers',
-        'distance'   => 'Distance',
-        'unit'       => 'Unit',
-        'title'      => 'Radius Search',
-        'indicate'   => 'Within :radius :units of :address',
+        'distance' => 'Distance',
+        'unit' => 'Unit',
+        'title' => 'Radius Search',
+        'indicate' => 'Within :radius :units of :address',
     ],
     'map_is_filter' => [
         'indicate' => 'showing :count markers in view',
@@ -16,7 +16,7 @@ return [
     'static_map_action' => [
         'modal' => [
             'heading' => 'Download Static Map',
-            'label'   => 'Do it!',
+            'label' => 'Do it!',
             'success' => 'Success',
         ],
         'button' => [
@@ -26,7 +26,7 @@ return [
     'widget_map_action' => [
         'modal' => [
             'heading' => 'Display Map',
-            'label'   => 'Do it!',
+            'label' => 'Do it!',
             'success' => 'Success',
         ],
         'button' => [
@@ -36,7 +36,7 @@ return [
     'radius_action' => [
         'modal' => [
             'heading' => 'Display Map',
-            'label'   => 'Do it!',
+            'label' => 'Do it!',
             'success' => 'Success',
         ],
         'button' => [

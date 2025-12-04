@@ -26,7 +26,7 @@ class MapIsFilter extends BaseFilter
 
         $this->indicateUsing(function (MapIsFilter $filter, array $state): array {
             if ($this->getLivewire()->mapIsFilter) {
-                if (! $this->getLivewire()->mapFilterFirstTime) {
+                if (!$this->getLivewire()->mapFilterFirstTime) {
                     if ($count = count($this->getLivewire()->mapFilterIds)) {
                         $label = __('filament-google-maps::fgm.map_is_filter.indicate', [
                             'count' => $count,

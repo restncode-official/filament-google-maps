@@ -42,24 +42,24 @@ class WidgetMap extends Field
      */
     private array $mapConfig = [
         'draggable' => false,
-        'center'    => [
+        'center' => [
             'lat' => 15.3419776,
             'lng' => 44.2171392,
         ],
-        'zoom'       => 8,
-        'fit'        => true,
-        'gmaps'      => '',
+        'zoom' => 8,
+        'fit' => true,
+        'gmaps' => '',
         'clustering' => true,
     ];
 
     public array $controls = [
-        'mapTypeControl'    => true,
-        'scaleControl'      => true,
+        'mapTypeControl' => true,
+        'scaleControl' => true,
         'streetViewControl' => true,
-        'rotateControl'     => true,
+        'rotateControl' => true,
         'fullscreenControl' => true,
-        'searchBoxControl'  => false,
-        'zoomControl'       => true,
+        'searchBoxControl' => false,
+        'zoomControl' => true,
     ];
 
     public function getHeading(): string
@@ -146,7 +146,7 @@ class WidgetMap extends Field
      *      'icon' => [ 'url' => 'path/to/foo.svg', 'type' => 'svg', 'scale' = [35,35] ]
      * ]
      *
-     * @param  Closure|array  $markers
+     * @param Closure|array $markers
      * @return $this
      */
     public function markers(Closure|int $markers): static
@@ -269,13 +269,13 @@ class WidgetMap extends Field
 
         $config = json_encode(
             array_merge($this->mapConfig, [
-                'clustering'   => self::getClustering(),
-                'layers'       => $this->getLayers(),
-                'zoom'         => $this->getZoom(),
-                'controls'     => $this->getMapControls(false),
+                'clustering' => self::getClustering(),
+                'layers' => $this->getLayers(),
+                'zoom' => $this->getZoom(),
+                'controls' => $this->getMapControls(false),
                 'markerAction' => $this->getMarkerAction() ? 'markerAction' : null,
-                'fit'          => $this->getFitToBounds(),
-                'gmaps'        => MapsHelper::mapsUrl(),
+                'fit' => $this->getFitToBounds(),
+                'gmaps' => MapsHelper::mapsUrl(),
             ])
         );
 

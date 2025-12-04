@@ -34,9 +34,9 @@ class FieldHelper
     public static function getFieldId(string $field, Component $component): ?string
     {
         $topComponent = self::getTopComponent($component);
-        $flatFields   = static::getFlatFields($topComponent);
+        $flatFields = static::getFlatFields($topComponent);
         $flatFields = collect($flatFields)
-            ->whereInstanceOf(Field::class)->keyBy(fn($field) => $field->getName());
+            ->whereInstanceOf(Field::class)->keyBy(fn ($field) => $field->getName());
 
         if ($flatFields->has($field)) {
             return $flatFields->get($field)->getStatePath();

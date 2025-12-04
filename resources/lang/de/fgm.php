@@ -2,13 +2,13 @@
 
 return [
     'radius_filter' => [
-        'address'    => 'Adresse',
-        'miles'      => 'Meilen',
+        'address' => 'Adresse',
+        'miles' => 'Meilen',
         'kilometers' => 'Kilometer',
-        'distance'   => 'Distanz',
-        'unit'       => 'Einheit',
-        'title'      => 'Suchradius',
-        'indicate'   => 'Innerhalb von :radius :units um :address',
+        'distance' => 'Distanz',
+        'unit' => 'Einheit',
+        'title' => 'Suchradius',
+        'indicate' => 'Innerhalb von :radius :units um :address',
     ],
     'map_is_filter' => [
         'indicate' => 'Zeige :count Pins in Ansicht',
@@ -16,7 +16,7 @@ return [
     'static_map_action' => [
         'modal' => [
             'heading' => 'Statische Karte herunterladen',
-            'label'   => 'Tu es!',
+            'label' => 'Tu es!',
             'success' => 'Erfolg',
         ],
         'button' => [
@@ -26,7 +26,7 @@ return [
     'widget_map_action' => [
         'modal' => [
             'heading' => 'Zeige Karte',
-            'label'   => 'Tu es!',
+            'label' => 'Tu es!',
             'success' => 'Erfolg',
         ],
         'button' => [
@@ -36,7 +36,7 @@ return [
     'radius_action' => [
         'modal' => [
             'heading' => 'Zeige Karte',
-            'label'   => 'Tu es!',
+            'label' => 'Tu es!',
             'success' => 'Erfolg',
         ],
         'button' => [

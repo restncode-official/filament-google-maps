@@ -2,9 +2,9 @@
 
 namespace Cheesegrits\FilamentGoogleMaps\Actions;
 
-use Filament\Actions\Action;
 use Cheesegrits\FilamentGoogleMaps\Helpers\MapsHelper;
 use Closure;
+use Filament\Actions\Action;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
@@ -46,24 +46,24 @@ class RadiusAction extends Action
             $this->process(function (HasTable $livewire, Model $record): void {
                 if ($relationship = $this->getRelationship()) {
                     $latLngFields = $record->{$relationship}::getLatLngAttributes();
-                    $lat          = $record->{$relationship}->{$latLngFields['lat']};
-                    $lng          = $record->{$relationship}->{$latLngFields['lng']};
+                    $lat = $record->{$relationship}->{$latLngFields['lat']};
+                    $lng = $record->{$relationship}->{$latLngFields['lng']};
                 } else {
                     $latLngFields = $record::getLatLngAttributes();
-                    $lat          = $record->{$latLngFields['lat']};
-                    $lng          = $record->{$latLngFields['lng']};
+                    $lat = $record->{$latLngFields['lat']};
+                    $lng = $record->{$latLngFields['lng']};
                 }
                 $address = MapsHelper::reverseGeocode([
                     'lat' => $lat,
                     'lng' => $lng,
                 ]);
 
-                $form                                   = $livewire->getTableFiltersForm();
-                $state                                  = $form->getState();
+                $form = $livewire->getTableFiltersForm();
+                $state = $form->getState();
                 $state[$this->getName()]['geocomplete'] = $address;
                 $form->fill($state);
 
-                $livewire->tableFilters[$this->getName()]['latitude']  = $lat;
+                $livewire->tableFilters[$this->getName()]['latitude'] = $lat;
                 $livewire->tableFilters[$this->getName()]['longitude'] = $lng;
             });
 

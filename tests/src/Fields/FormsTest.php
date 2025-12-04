@@ -18,15 +18,15 @@ it('can create geocomplete field as computed location attribute', function () {
     livewire(CreateLocation::class)
         ->fillForm([
             'street' => $location->street,
-            'city'   => $location->city,
-            'state'  => $location->state,
-            'zip'    => $location->zip,
+            'city' => $location->city,
+            'state' => $location->state,
+            'zip' => $location->zip,
         ])
         ->set(
             'data.location',
             [
-                'lat'               => $location->lat,
-                'lng'               => $location->lng,
+                'lat' => $location->lat,
+                'lng' => $location->lng,
                 'formatted_address' => $location->formatted_address,
             ],
         )
@@ -44,10 +44,10 @@ it('can create geocomplete field as normal field', function () {
 
     livewire(CreateGeocomplete::class)
         ->fillForm([
-            'street'            => $location->street,
-            'city'              => $location->city,
-            'state'             => $location->state,
-            'zip'               => $location->zip,
+            'street' => $location->street,
+            'city' => $location->city,
+            'state' => $location->state,
+            'zip' => $location->zip,
             'formatted_address' => $location->formatted_address,
         ])
         ->call('create')
@@ -66,9 +66,9 @@ it('can edit geocomplete field as computed location attribute without geocodeOnL
     ])
         ->assertFormSet([
             'street' => $location->street,
-            'city'   => $location->city,
-            'state'  => $location->state,
-            'zip'    => $location->zip,
+            'city' => $location->city,
+            'state' => $location->state,
+            'zip' => $location->zip,
         ]);
 });
 
@@ -79,10 +79,10 @@ it('can edit geocomplete field as normal field', function () {
         'record' => $location->getKey(),
     ])
         ->assertFormSet([
-            'street'            => $location->street,
-            'city'              => $location->city,
-            'state'             => $location->state,
-            'zip'               => $location->zip,
+            'street' => $location->street,
+            'city' => $location->city,
+            'state' => $location->state,
+            'zip' => $location->zip,
             'formatted_address' => $location->formatted_address,
         ]);
 });
@@ -94,14 +94,14 @@ it('can edit map field as computed location attribute', function () {
         'record' => $location->getKey(),
     ])
         ->assertFormSet([
-            'lat'               => round($location->lat, 8),
-            'lng'               => round($location->lng, 8),
-            'street'            => $location->street,
-            'city'              => $location->city,
-            'state'             => $location->state,
-            'zip'               => $location->zip,
+            'lat' => round($location->lat, 8),
+            'lng' => round($location->lng, 8),
+            'street' => $location->street,
+            'city' => $location->city,
+            'state' => $location->state,
+            'zip' => $location->zip,
             'formatted_address' => $location->formatted_address,
-            'location'          => [
+            'location' => [
                 'lat' => $location->lat,
                 'lng' => $location->lng,
             ],
@@ -109,19 +109,19 @@ it('can edit map field as computed location attribute', function () {
 });
 
 it('can save map field as computed location attribute', function () {
-    $location    = Location::factory()->create();
+    $location = Location::factory()->create();
     $newLocation = Location::factory()->make();
 
     livewire(EditMap::class, [
         'record' => $location->getKey(),
     ])
         ->fillForm([
-            'street'            => $newLocation->street,
-            'city'              => $newLocation->city,
-            'state'             => $newLocation->state,
-            'zip'               => $newLocation->zip,
+            'street' => $newLocation->street,
+            'city' => $newLocation->city,
+            'state' => $newLocation->state,
+            'zip' => $newLocation->zip,
             'formatted_address' => $newLocation->formatted_address,
-            'location'          => [
+            'location' => [
                 'lat' => $newLocation->lat,
                 'lng' => $newLocation->lng,
             ],

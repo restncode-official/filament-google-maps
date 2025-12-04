@@ -17,7 +17,10 @@ use Illuminate\Queue\SerializesModels;
  */
 class GeocodeJob implements ShouldQueue
 {
-    use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+    use Dispatchable;
+    use InteractsWithQueue;
+    use Queueable;
+    use SerializesModels;
 
     protected int $limit;
 
@@ -25,7 +28,7 @@ class GeocodeJob implements ShouldQueue
 
     public function __construct(?int $limit, ?int $rateLimit)
     {
-        $this->limit     = $limit ?? 1000;
+        $this->limit = $limit ?? 1000;
         $this->rateLimit = $rateLimit ?? 50;
     }
 

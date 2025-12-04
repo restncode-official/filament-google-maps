@@ -2,11 +2,12 @@
 
 namespace Cheesegrits\FilamentGoogleMaps\Commands;
 
-use Throwable;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
 
 use function Laravel\Prompts\text;
+
+use Throwable;
 
 class ModelCode extends Command
 {
@@ -20,8 +21,8 @@ class ModelCode extends Command
 
         $modelName = $this->argument('model');
 
-        if (! $modelName) {
-            $asking    = true;
+        if (!$modelName) {
+            $asking = true;
             $modelName = text(
                 label: 'Model (e.g. `Location` or `Maps/Dealership`)',
                 placeholder: 'Location',
@@ -61,16 +62,16 @@ class ModelCode extends Command
         if ($asking) {
             $comments = $this->confirm('Include comments in the code?', true);
         } else {
-            $comments = ! $this->option('terse');
+            $comments = !$this->option('terse');
         }
 
         $guardedStr = '';
-        $guarded    = $model->getGuarded();
+        $guarded = $model->getGuarded();
 
         if (in_array($locationField, $guarded)) {
             unset($guarded[array_search($locationField, $guarded)]);
             $guardedAttributes = implode(",\n        ", array_map(fn ($item) => "'{$item}'", $guarded));
-            $guardedStr        = <<<EOT
+            $guardedStr = <<<EOT
 
     protected \$guarded = [
         {$guardedAttributes},
@@ -79,12 +80,12 @@ EOT;
         }
 
         $fillableStr = '';
-        $fillable    = $model->getFillable();
+        $fillable = $model->getFillable();
 
-        if (! in_array($locationField, $fillable)) {
-            $fillable[]         = $locationField;
+        if (!in_array($locationField, $fillable)) {
+            $fillable[] = $locationField;
             $fillableAttributes = implode(",\n        ", array_map(fn ($item) => "'{$item}'", $fillable));
-            $fillableStr        = <<<EOT
+            $fillableStr = <<<EOT
 
     protected \$fillable = [
         {$fillableAttributes},
@@ -93,12 +94,12 @@ EOT;
         }
 
         $appendsStr = '';
-        $appends    = $model->getAppends();
+        $appends = $model->getAppends();
 
-        if (! in_array($locationField, $appends)) {
-            $appends[]         = $locationField;
+        if (!in_array($locationField, $appends)) {
+            $appends[] = $locationField;
             $appendsAttributes = implode(",\n        ", array_map(fn ($item) => "'{$item}'", $appends));
-            $appendsStr        = <<<EOT
+            $appendsStr = <<<EOT
     protected \$appends = [
         {$appendsAttributes},
     ];
@@ -106,7 +107,7 @@ EOT;
         }
 
         $locationStr = Str::studly($locationField);
-        $modelCode   = '';
+        $modelCode = '';
 
         $cmd = sprintf(
             'php artisan fgm:model-code %s --lat=%s --lng=%s --location=%s',
@@ -116,11 +117,11 @@ EOT;
             $locationField
         );
 
-        if (! $comments) {
+        if (!$comments) {
             $cmd .= ' --terse';
         }
 
-        if (! $comments) {
+        if (!$comments) {
             $modelCode .= <<<EOT
     /**
      * The following code was generated for use with Filament Google Maps
@@ -131,7 +132,7 @@ EOT;
 EOT;
         }
 
-        if (! empty($guardedStr) || ! empty($fillableStr) || ! empty($appendsStr)) {
+        if (!empty($guardedStr) || !empty($fillableStr) || !empty($appendsStr)) {
             if ($comments) {
                 $modelCode .= <<<EOT
     /**

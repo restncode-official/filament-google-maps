@@ -22,17 +22,17 @@ it('can load a record with geocodeOnLoad', function () {
         'id' => $location->getKey(),
     ])
         ->assertFormSet([
-            'lat'      => round($location->lat, 8),
-            'lng'      => round($location->lng, 8),
+            'lat' => round($location->lat, 8),
+            'lng' => round($location->lng, 8),
             'location' => [
-                'lat'               => $location->lat,
-                'lng'               => $location->lng,
+                'lat' => $location->lat,
+                'lng' => $location->lng,
                 'formatted_address' => $location->formatted_address,
             ],
-            'street'            => $location->street,
-            'city'              => $location->city,
-            'state'             => $location->state,
-            'zip'               => $location->zip,
+            'street' => $location->street,
+            'city' => $location->city,
+            'state' => $location->state,
+            'zip' => $location->zip,
             'formatted_address' => $location->formatted_address,
         ]);
 });
@@ -44,47 +44,47 @@ it('can load a record without geocodeOnLoad', function () {
         'id' => $location->getKey(),
     ])
         ->assertFormSet([
-            'lat'      => $location->lat,
-            'lng'      => $location->lng,
+            'lat' => $location->lat,
+            'lng' => $location->lng,
             'location' => [
-                'lat'               => $location->lat,
-                'lng'               => $location->lng,
+                'lat' => $location->lat,
+                'lng' => $location->lng,
                 'formatted_address' => '',
             ],
-            'street'            => $location->street,
-            'city'              => $location->city,
-            'state'             => $location->state,
-            'zip'               => $location->zip,
+            'street' => $location->street,
+            'city' => $location->city,
+            'state' => $location->state,
+            'zip' => $location->zip,
             'formatted_address' => $location->formatted_address,
         ]);
 });
 
 it('can save a record with isLocation', function () {
-    $location    = Location::factory()->create();
+    $location = Location::factory()->create();
     $newLocation = Location::factory()->make();
 
     livewire(TestComponentWithoutGeocodeOnLoad::class, [
         'id' => $location->getKey(),
     ])
         ->assertFormSet([
-            'lat'      => $location->lat,
-            'lng'      => $location->lng,
+            'lat' => $location->lat,
+            'lng' => $location->lng,
             'location' => [
-                'lat'               => $location->lat,
-                'lng'               => $location->lng,
+                'lat' => $location->lat,
+                'lng' => $location->lng,
                 'formatted_address' => '',
             ],
-            'street'            => $location->street,
-            'city'              => $location->city,
-            'state'             => $location->state,
-            'zip'               => $location->zip,
+            'street' => $location->street,
+            'city' => $location->city,
+            'state' => $location->state,
+            'zip' => $location->zip,
             'formatted_address' => $location->formatted_address,
         ])
         ->set(
             'data.location',
             [
-                'lat'               => $newLocation->lat,
-                'lng'               => $newLocation->lng,
+                'lat' => $newLocation->lat,
+                'lng' => $newLocation->lng,
                 'formatted_address' => $newLocation->formatted_address,
             ],
         )

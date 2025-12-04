@@ -2,20 +2,19 @@
 
 namespace Cheesegrits\FilamentGoogleMaps\Widgets;
 
-use Filament\Widgets\Widget;
-use Filament\Widgets\Concerns\CanPoll;
 use Cheesegrits\FilamentGoogleMaps\Helpers\MapsHelper;
 use Filament\Actions\Concerns\InteractsWithActions;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
-use Filament\Widgets;
+use Filament\Widgets\Concerns\CanPoll;
+use Filament\Widgets\Widget;
 
 class MapWidget extends Widget implements HasActions, HasForms
 {
+    use CanPoll;
     use InteractsWithActions;
     use InteractsWithForms;
-    use CanPoll;
 
     protected ?array $cachedData = null;
 
@@ -52,26 +51,26 @@ class MapWidget extends Widget implements HasActions, HasForms
     protected string $view = 'filament-google-maps::widgets.filament-google-maps-widget';
 
     public array $controls = [
-        'mapTypeControl'    => true,
-        'scaleControl'      => true,
+        'mapTypeControl' => true,
+        'scaleControl' => true,
         'streetViewControl' => true,
-        'rotateControl'     => true,
+        'rotateControl' => true,
         'fullscreenControl' => true,
-        'searchBoxControl'  => false,
-        'zoomControl'       => true,
+        'searchBoxControl' => false,
+        'zoomControl' => true,
     ];
 
     protected array $mapConfig = [
         'draggable' => false,
-        'center'    => [
+        'center' => [
             'lat' => 15.3419776,
             'lng' => 44.2171392,
         ],
-        'zoom'       => 8,
-        'fit'        => true,
-        'gmaps'      => '',
+        'zoom' => 8,
+        'fit' => true,
+        'gmaps' => '',
         'clustering' => true,
-        'mapConfig'  => [],
+        'mapConfig' => [],
     ];
 
     public function mount()
@@ -157,14 +156,14 @@ class MapWidget extends Widget implements HasActions, HasForms
     public function getConfig(): array
     {
         return [
-            'clustering'   => self::getClustering(),
-            'layers'       => $this->getLayers(),
-            'zoom'         => $this->getZoom(),
-            'controls'     => $this->controls,
-            'fit'          => $this->getFitToBounds(),
+            'clustering' => self::getClustering(),
+            'layers' => $this->getLayers(),
+            'zoom' => $this->getZoom(),
+            'controls' => $this->controls,
+            'fit' => $this->getFitToBounds(),
             'markerAction' => $this->getMarkerAction(),
-            'gmaps'        => MapsHelper::mapsUrl(),
-            'mapConfig'    => [],
+            'gmaps' => MapsHelper::mapsUrl(),
+            'mapConfig' => [],
         ];
     }
 

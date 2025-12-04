@@ -2,13 +2,13 @@
 
 namespace Cheesegrits\FilamentGoogleMaps\Filters;
 
-use Filament\Schemas\Components\Group;
-use Filament\Schemas\Components\Fieldset;
 use Cheesegrits\FilamentGoogleMaps\Fields\Geocomplete;
 use Closure;
 use Filament\Forms\Components\Hidden;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Fieldset;
+use Filament\Schemas\Components\Group;
 use Filament\Tables\Filters\BaseFilter;
 use Filament\Tables\Filters\Concerns\HasRelationship;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,8 +54,8 @@ class RadiusFilter extends BaseFilter
             }
 
             $label = __('filament-google-maps::fgm.radius_filter.indicate', [
-                'radius'  => $state['radius'],
-                'units'   => $state['unit'],
+                'radius' => $state['radius'],
+                'units' => $state['unit'],
                 'address' => $state['geocomplete'],
             ]);
 
@@ -65,9 +65,9 @@ class RadiusFilter extends BaseFilter
 
     public function apply(Builder $query, array $data = []): Builder
     {
-        $latitude  = $data['latitude'] ?? null;
+        $latitude = $data['latitude'] ?? null;
         $longitude = $data['longitude'] ?? null;
-        $distance  = $data['radius'] ?? null;
+        $distance = $data['radius'] ?? null;
 
         if ($latitude && $longitude && $distance) {
             $kilometers = $this->getKilometers();
@@ -84,7 +84,7 @@ class RadiusFilter extends BaseFilter
 
             $sql = sprintf($sql, $kilometers ? (1.1515 * 1.609344) : 1.1515);
 
-            if (! $this->queriesRelationships()) {
+            if (!$this->queriesRelationships()) {
                 $query->whereRaw($sql);
             } else {
                 $query->whereHas(
@@ -126,7 +126,7 @@ class RadiusFilter extends BaseFilter
                             ->default(
                                 $this->getKilometers() ? 'km' : 'mi'
                             )
-                            ->visible(fn() => $this->getSelectUnit()),
+                            ->visible(fn () => $this->getSelectUnit()),
                     ]),
                 Group::make()->schema([
                     Hidden::make('latitude'),
@@ -191,7 +191,7 @@ class RadiusFilter extends BaseFilter
     public function getLatitude(): string
     {
         return $this->evaluate($this->latitude) ??
-            ! $this->queriesRelationships() ? $this->getTable()->getModel()::getLatLngAttributes()['lat']
+            !$this->queriesRelationships() ? $this->getTable()->getModel()::getLatLngAttributes()['lat']
             : $this->getRelationship()->getModel()->getLatLngAttributes()['lat'];
     }
 
@@ -205,7 +205,7 @@ class RadiusFilter extends BaseFilter
     public function getLongitude(): string
     {
         return $this->evaluate($this->longitude) ??
-            ! $this->queriesRelationships() ? $this->getTable()->getModel()::getLatLngAttributes()['lng']
+            !$this->queriesRelationships() ? $this->getTable()->getModel()::getLatLngAttributes()['lng']
             : $this->getRelationship()->getModel()->getLatLngAttributes()['lng'];
     }
 
@@ -229,7 +229,7 @@ class RadiusFilter extends BaseFilter
 
     private function hasSection(): bool
     {
-        return ! empty($this->getSection());
+        return !empty($this->getSection());
     }
 
     // public function relation(bool|Closure $relationship = true): static
@@ -246,7 +246,7 @@ class RadiusFilter extends BaseFilter
 
     public function isRelationship(): bool
     {
-        return ! empty($this->getRelationship());
+        return !empty($this->getRelationship());
     }
 
     public function attribute(string|Closure|null $name): static

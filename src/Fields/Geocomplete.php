@@ -2,8 +2,12 @@
 
 namespace Cheesegrits\FilamentGoogleMaps\Fields;
 
-use Filament\Forms\Components\Contracts\CanBeLengthConstrained;
-use Filament\Schemas\Components\Contracts\HasAffixActions;
+use Cheesegrits\FilamentGoogleMaps\Helpers\FieldHelper;
+use Cheesegrits\FilamentGoogleMaps\Helpers\MapsHelper;
+use Closure;
+use Exception;
+use Filament\Actions\Action;
+use Filament\Forms\Components\Concerns;
 use Filament\Forms\Components\Concerns\CanBeAutocapitalized;
 use Filament\Forms\Components\Concerns\CanBeAutocompleted;
 use Filament\Forms\Components\Concerns\CanBeReadOnly;
@@ -11,27 +15,22 @@ use Filament\Forms\Components\Concerns\HasAffixes;
 use Filament\Forms\Components\Concerns\HasExtraInputAttributes;
 use Filament\Forms\Components\Concerns\HasInputMode;
 use Filament\Forms\Components\Concerns\HasPlaceholder;
-use Filament\Actions\Action;
-use Cheesegrits\FilamentGoogleMaps\Helpers\FieldHelper;
-use Cheesegrits\FilamentGoogleMaps\Helpers\MapsHelper;
-use Closure;
-use Exception;
-use Filament\Forms\Components\Concerns;
-use Filament\Forms\Components\Contracts;
+use Filament\Forms\Components\Contracts\CanBeLengthConstrained;
 use Filament\Forms\Components\Field;
+use Filament\Schemas\Components\Contracts\HasAffixActions;
 use Filament\Support\Concerns\HasExtraAlpineAttributes;
 
 class Geocomplete extends Field implements CanBeLengthConstrained, HasAffixActions
 {
     use CanBeAutocapitalized;
     use CanBeAutocompleted;
-    use Concerns\CanBeLengthConstrained;
     use CanBeReadOnly;
+    use Concerns\CanBeLengthConstrained;
     use HasAffixes;
+    use HasExtraAlpineAttributes;
     use HasExtraInputAttributes;
     use HasInputMode;
     use HasPlaceholder;
-    use HasExtraAlpineAttributes;
 
     protected string $view = 'filament-google-maps::fields.filament-google-geocomplete';
 
@@ -115,7 +114,7 @@ class Geocomplete extends Field implements CanBeLengthConstrained, HasAffixActio
      * If set to true, will update lat and lng fields on the form when a place is selected from the dropdown.  Requires
      * the getLatLngAttributes() method on the model, as per the filament-google-maps:model-code Artisan command.
      *
-     * @param  Closure|bool  $debug
+     * @param Closure|bool $debug
      * @return $this
      */
     public function updateLatLng(Closure|bool $updateLatLng = true): static
@@ -153,7 +152,7 @@ class Geocomplete extends Field implements CanBeLengthConstrained, HasAffixActio
     /**
      * Optionally set this to true, if you want the geocomplete to update lat/lng fields on your form
      *
-     * @param  Closure|string  $name
+     * @param Closure|string $name
      * @return $this
      */
     public function isLocation(Closure|bool $isLocation = true): static
@@ -251,7 +250,7 @@ class Geocomplete extends Field implements CanBeLengthConstrained, HasAffixActio
 
     public function getReverseGeocode(): array
     {
-        $fields     = $this->evaluate($this->reverseGeocode);
+        $fields = $this->evaluate($this->reverseGeocode);
         $statePaths = [];
 
         foreach ($fields as $field => $format) {
@@ -287,7 +286,7 @@ class Geocomplete extends Field implements CanBeLengthConstrained, HasAffixActio
     {
         $callback = $this->reverseGeocodeUsing;
 
-        if (! $callback) {
+        if (!$callback) {
             return $this;
         }
 
@@ -386,7 +385,7 @@ class Geocomplete extends Field implements CanBeLengthConstrained, HasAffixActio
                 if ($component->getGeocodeOnLoad()) {
                     $state = static::getLocationState($state);
 
-                    if (! MapsHelper::isLocationEmpty($state)) {
+                    if (!MapsHelper::isLocationEmpty($state)) {
                         $state['formatted_address'] = MapsHelper::reverseGeocode($state);
                     } else {
                         $state['formatted_address'] = '';
@@ -416,18 +415,18 @@ class Geocomplete extends Field implements CanBeLengthConstrained, HasAffixActio
     public function getGeocompleteConfig(): string
     {
         $config = json_encode([
-            'filterName'           => $this->getFilterName(),
-            'statePath'            => $this->getStatePath(),
-            'isLocation'           => $this->getIsLocation(),
+            'filterName' => $this->getFilterName(),
+            'statePath' => $this->getStatePath(),
+            'isLocation' => $this->getIsLocation(),
             'reverseGeocodeFields' => $this->getReverseGeocode(),
-            'reverseGeocodeUsing'  => $this->getReverseGeocodeUsing(),
-            'latLngFields'         => $this->getUpdateLatLngFields(),
-            'types'                => $this->getTypes(),
-            'countries'            => $this->getCountries(),
-            'placeField'           => $this->getPlaceField(),
-            'debug'                => $this->getDebug(),
-            'gmaps'                => $this->getMapsUrl(),
-            'minChars'             => $this->getMinChars(),
+            'reverseGeocodeUsing' => $this->getReverseGeocodeUsing(),
+            'latLngFields' => $this->getUpdateLatLngFields(),
+            'types' => $this->getTypes(),
+            'countries' => $this->getCountries(),
+            'placeField' => $this->getPlaceField(),
+            'debug' => $this->getDebug(),
+            'gmaps' => $this->getMapsUrl(),
+            'minChars' => $this->getMinChars(),
         ]);
 
         // ray($config);

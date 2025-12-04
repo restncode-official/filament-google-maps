@@ -15,9 +15,9 @@ class Geocode extends Command
 
     public function handle()
     {
-        $array   = $this->option('array');
+        $array = $this->option('array');
         $command = $this->option('command');
-        $args    = $this->option('args');
+        $args = $this->option('args');
 
         $address = $this->option('address');
 

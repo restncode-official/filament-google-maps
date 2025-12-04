@@ -2,14 +2,13 @@
 
 namespace Cheesegrits\FilamentGoogleMaps\Actions;
 
-use Filament\Actions\BulkAction;
-use Filament\Schemas\Components\Section;
-use Filament\Forms\Components\TextInput;
-use Filament\Forms\Components\Select;
 use Cheesegrits\FilamentGoogleMaps\Columns\MapColumn;
 use Cheesegrits\FilamentGoogleMaps\Helpers\MapsHelper;
+use Filament\Actions\BulkAction;
 use Filament\Actions\Concerns\CanCustomizeProcess;
-use Filament\Forms;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Mastani\GoogleStaticMap\GoogleStaticMap;
@@ -62,9 +61,9 @@ class StaticMapAction extends BulkAction
                 Select::make('type')
                     ->options([
                         'satellite' => 'Satellite',
-                        'hybrid'    => 'Hybrid',
-                        'roadmap'   => 'Roadmap',
-                        'terrain'   => 'Terrain',
+                        'hybrid' => 'Hybrid',
+                        'roadmap' => 'Roadmap',
+                        'terrain' => 'Terrain',
                     ])
                     ->default('roadmap'),
             ])
@@ -75,7 +74,7 @@ class StaticMapAction extends BulkAction
         $this->action(function (): void {
             $this->process(function (array $data, Collection $records) {
                 $markers = [];
-                $map     = new GoogleStaticMap(MapsHelper::mapsKey(true));
+                $map = new GoogleStaticMap(MapsHelper::mapsKey(true));
 
                 $url = $map
                     ->setZoom(0)

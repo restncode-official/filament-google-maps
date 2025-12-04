@@ -2,7 +2,6 @@
 
 namespace Cheesegrits\FilamentGoogleMaps\Commands;
 
-use Throwable;
 use Exception;
 use Filament\Support\Commands\Concerns\CanManipulateFiles;
 use Illuminate\Console\Command;
@@ -10,6 +9,8 @@ use Illuminate\Support\Str;
 
 use function Laravel\Prompts\select;
 use function Laravel\Prompts\text;
+
+use Throwable;
 
 class MakeWidgetCommand extends Command
 {
@@ -23,13 +24,13 @@ class MakeWidgetCommand extends Command
 
     public function handle(): int
     {
-        $path              = config('filament.widgets.path', app_path('Filament/Widgets/'));
-        $resourcePath      = config('filament.resources.path', app_path('Filament/Resources/'));
-        $namespace         = config('filament.widgets.namespace', 'App\\Filament\\Widgets');
+        $path = config('filament.widgets.path', app_path('Filament/Widgets/'));
+        $resourcePath = config('filament.resources.path', app_path('Filament/Resources/'));
+        $namespace = config('filament.widgets.namespace', 'App\\Filament\\Widgets');
         $resourceNamespace = config('filament.resources.namespace', 'App\\Filament\\Resources');
 
-        $type      = false;
-        $typeMap   = $this->option('map');
+        $type = false;
+        $typeMap = $this->option('map');
         $typeTable = $this->option('table');
 
         if ($typeMap) {
@@ -40,7 +41,7 @@ class MakeWidgetCommand extends Command
             $type = select(
                 label: 'Widget type (just a map, or map with integrated table',
                 options: [
-                    'map'   => 'Map',
+                    'map' => 'Map',
                     'table' => 'Map & Table',
                 ],
                 default: 'map'
@@ -77,7 +78,7 @@ class MakeWidgetCommand extends Command
 
         try {
             /** @noinspection PhpUnusedLocalVariableInspection */
-            $model     = new ('\\App\\Models\\' . $modelName)();
+            $model = new ('\\App\\Models\\' . $modelName)();
             $modelName = '\\App\\Models\\' . $modelName;
         } catch (Throwable) {
             try {
@@ -100,7 +101,7 @@ class MakeWidgetCommand extends Command
             return static::INVALID;
         }
 
-        $resource      = null;
+        $resource = null;
         $resourceClass = null;
 
         $resourceInput = $this->option('resource') ?? text(label: '(Optional) Resource (e.g. `LocationResource`)', placeholder: 'LocationResource');
@@ -113,7 +114,7 @@ class MakeWidgetCommand extends Command
                 ->trim(' ')
                 ->replace('/', '\\');
 
-            if (! Str::of($resource)->endsWith('Resource')) {
+            if (!Str::of($resource)->endsWith('Resource')) {
                 $resource .= 'Resource';
             }
 
@@ -144,23 +145,23 @@ class MakeWidgetCommand extends Command
                 ->append('.blade.php'),
         );
 
-        if (! $this->option('force') && $this->checkForCollision([$path, $viewPath])) {
+        if (!$this->option('force') && $this->checkForCollision([$path, $viewPath])) {
             return static::INVALID;
         }
 
         if ($type === 'table') {
             $this->copyStubToApp('MapTableWidget', $path, [
-                'location'  => $locationField,
-                'og-model'  => $ogModelName,
-                'model'     => $modelName,
-                'class'     => $widgetClass,
-                'pk'        => $model->getKeyName(),
+                'location' => $locationField,
+                'og-model' => $ogModelName,
+                'model' => $modelName,
+                'class' => $widgetClass,
+                'pk' => $model->getKeyName(),
                 'namespace' => filled($resource) ? "{$resourceNamespace}\\{$resource}\\Widgets" . ($widgetNamespace !== '' ? "\\{$widgetNamespace}" : '') : $namespace . ($widgetNamespace !== '' ? "\\{$widgetNamespace}" : ''),
             ] + $latLongFields);
         } else {
             $this->copyStubToApp('MapWidget', $path, [
-                'model'     => $modelName,
-                'class'     => $widgetClass,
+                'model' => $modelName,
+                'class' => $widgetClass,
                 'namespace' => filled($resource) ? "{$resourceNamespace}\\{$resource}\\Widgets" . ($widgetNamespace !== '' ? "\\{$widgetNamespace}" : '') : $namespace . ($widgetNamespace !== '' ? "\\{$widgetNamespace}" : ''),
             ] + $latLongFields);
         }
@@ -171,7 +172,7 @@ class MakeWidgetCommand extends Command
             $this->info("Make sure to register the widget both in `{$resourceClass}::getWidgets()`,");
             $this->info("and in either `getHeaderWidgets()` or `getFooterWidgets()` of any `{$resourceClass}` page.");
         } else {
-            $livewire   = (string) Str::of($widget)->snake();
+            $livewire = (string) Str::of($widget)->snake();
             $widgetPath = (string) Str::of($resourceNamespace)->replace('\\', '/') . '/' . $widget . '.php';
             $this->info("Your widget has been created as: $widgetPath");
             $this->newLine();

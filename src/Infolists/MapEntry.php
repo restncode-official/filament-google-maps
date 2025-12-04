@@ -45,24 +45,24 @@ class MapEntry extends Entry
             'lat' => 15.3419776,
             'lng' => 44.2171392,
         ],
-        'controls'     => [],
+        'controls' => [],
         'drawingField' => null,
-        'statePath'    => '',
-        'layers'       => [],
-        'defaultZoom'  => 8,
-        'gmaps'        => '',
+        'statePath' => '',
+        'layers' => [],
+        'defaultZoom' => 8,
+        'gmaps' => '',
     ];
 
     private array $componentTree = [];
 
     public array $controls = [
-        'mapTypeControl'    => true,
-        'scaleControl'      => true,
+        'mapTypeControl' => true,
+        'scaleControl' => true,
         'streetViewControl' => true,
-        'rotateControl'     => true,
+        'rotateControl' => true,
         'fullscreenControl' => true,
-        'searchBoxControl'  => false,
-        'zoomControl'       => true,
+        'searchBoxControl' => false,
+        'zoomControl' => true,
     ];
 
     public function height(Closure|string $height): static
@@ -251,15 +251,15 @@ class MapEntry extends Entry
     {
         $config = array_merge($this->mapConfig, [
             'defaultLocation' => $this->getDefaultLocation(),
-            'statePath'       => $this->getStatePath(),
-            'controls'        => $this->getMapControls(false),
-            'drawingField'    => $this->getDrawingField(),
-            'layers'          => $this->getLayers(),
-            'defaultZoom'     => $this->getDefaultZoom(),
-            'geoJson'         => $this->getGeoJsonFile(),
+            'statePath' => $this->getStatePath(),
+            'controls' => $this->getMapControls(false),
+            'drawingField' => $this->getDrawingField(),
+            'layers' => $this->getLayers(),
+            'defaultZoom' => $this->getDefaultZoom(),
+            'geoJson' => $this->getGeoJsonFile(),
             'geoJsonProperty' => $this->getGeoJsonProperty(),
-            'geoJsonVisible'  => $this->getGeoJsonVisible(),
-            'gmaps'           => MapsHelper::mapsUrl(false, $this->getDrawingControl() ? ['drawing'] : []),
+            'geoJsonVisible' => $this->getGeoJsonVisible(),
+            'gmaps' => MapsHelper::mapsUrl(false, $this->getDrawingControl() ? ['drawing'] : []),
         ]);
 
         return json_encode($config);

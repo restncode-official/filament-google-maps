@@ -2,12 +2,12 @@
 
 namespace Cheesegrits\FilamentGoogleMaps\Actions;
 
-use Filament\Actions\BulkAction;
-use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
 use Cheesegrits\FilamentGoogleMaps\Fields\WidgetMap;
+use Filament\Actions\BulkAction;
 use Filament\Actions\Concerns\CanCustomizeProcess;
 use Filament\Forms;
+use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,7 +43,7 @@ class WidgetMapAction extends BulkAction
         $this->size('lg');
 
         $this->mountUsing(function (Schema $schema, $records) {
-            $markers      = [];
+            $markers = [];
             $latLngFields = $this->getModel()::getLatLngAttributes();
 
             $records->each(function (Model $record) use (&$markers, $latLngFields) {

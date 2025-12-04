@@ -5,9 +5,10 @@ namespace Cheesegrits\FilamentGoogleMaps\Commands;
 use Cheesegrits\FilamentGoogleMaps\Helpers\Geocoder;
 use Illuminate\Console\Command;
 use Illuminate\Support\Str;
-use Throwable;
 
 use function Laravel\Prompts\text;
+
+use Throwable;
 
 class GeocodeTable extends Command
 {
@@ -20,7 +21,7 @@ class GeocodeTable extends Command
         $verbose = $this->option('verbose');
 
         $prompted = false;
-        $verbose  = $this->option('verbose');
+        $verbose = $this->option('verbose');
 
         $ogModelName = $modelName = (string) Str::of($this->argument('model')
             ?? text(label: 'Model (e.g. `Location` or `Maps/Dealership`)', placeholder: 'Location', required: true))
@@ -37,7 +38,7 @@ class GeocodeTable extends Command
         } catch (Throwable $e) {
             try {
                 /** @noinspection PhpUnusedLocalVariableInspection */
-                $model     = new ('\\App\\Models\\' . $modelName)();
+                $model = new ('\\App\\Models\\' . $modelName)();
                 $modelName = '\\App\\Models\\' . $modelName;
             } catch (Throwable $e) {
                 echo "Can't find class $modelName or \\App\\Models\\$modelName\n";

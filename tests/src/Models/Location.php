@@ -72,7 +72,7 @@ class Location extends Model
      *
      * Requires the 'location' attribute be included in this model's $appends array.
      *
-     * @param  ?array  $location
+     * @param ?array $location
      */
     public function setLocationAttribute(array|string $location): void
     {

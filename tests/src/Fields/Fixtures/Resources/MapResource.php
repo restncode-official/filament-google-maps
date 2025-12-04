@@ -91,10 +91,10 @@ class MapResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index'  => Pages\ListMap::route('/'),
+            'index' => Pages\ListMap::route('/'),
             'create' => Pages\CreateMap::route('/create'),
-            'view'   => Pages\ViewMap::route('/{record}'),
-            'edit'   => Pages\EditMap::route('/{record}/edit'),
+            'view' => Pages\ViewMap::route('/{record}'),
+            'edit' => Pages\EditMap::route('/{record}/edit'),
         ];
     }
 }
