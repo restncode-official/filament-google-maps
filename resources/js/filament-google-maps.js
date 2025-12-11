@@ -183,8 +183,16 @@ export default function filamentGoogleMapsField({
                 const searchBox = new google.maps.places.SearchBox(input);
                 this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
                 searchBox.addListener("places_changed", () => {
+                    const place = searchBox.getPlaces()[0];
+                    if (!place || !place.geometry) {
+                        return;
+                    }
                     input.value = "";
-                    this.markerLocation = searchBox.getPlaces()[0].geometry.location;
+                    this.markerLocation = place.geometry.location;
+                    this.marker.setPosition(this.markerLocation);
+                    this.setCoordinates(this.markerLocation);
+                    this.updateFromLocation(this.markerLocation);
+                    this.map.panTo(this.markerLocation);
                 });
             }
 
