@@ -182,6 +182,24 @@ export default function filamentGoogleMapsField({
                 const input = pacEl;
                 const searchBox = new google.maps.places.SearchBox(input);
                 this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+                input.addEventListener("keydown", (e) => {
+                    if (e.key === "Enter") {
+                        const location = this.parseLocationInput(input.value);
+                        if (location) {
+                            const latLng = new google.maps.LatLng(
+                                location.lat,
+                                location.lng
+                            );
+                            this.marker.setPosition(latLng);
+                            this.markerMoved({ latLng: latLng });
+                            input.value = "";
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                        }
+                    }
+                });
+
                 searchBox.addListener("places_changed", () => {
                     const place = searchBox.getPlaces()[0];
                     if (!place || !place.geometry) {
@@ -219,6 +237,23 @@ export default function filamentGoogleMapsField({
                 const geoComplete = document.getElementById(autocomplete);
 
                 if (geoComplete) {
+                    geoComplete.addEventListener("keydown", (e) => {
+                        if (e.key === "Enter") {
+                            const location = this.parseLocationInput(geoComplete.value);
+                            if (location) {
+                                const latLng = new google.maps.LatLng(
+                                    location.lat,
+                                    location.lng
+                                );
+                                this.marker.setPosition(latLng);
+                                this.markerMoved({ latLng: latLng });
+                                geoComplete.value = "";
+                                e.preventDefault();
+                                e.stopImmediatePropagation();
+                            }
+                        }
+                    });
+
                     window.addEventListener(
                         "keydown",
                         function (e) {
@@ -465,6 +500,49 @@ export default function filamentGoogleMapsField({
                     console.error("Error executing afterInitJs:", error);
                 }
             }
+        },
+        parseLocationInput: function (value) {
+            const latLngRegex =
+                /^([-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)),\s*([-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?))$/;
+            let match = value.match(latLngRegex);
+            if (match) {
+                return {
+                    lat: parseFloat(match[1]),
+                    lng: parseFloat(match[5]),
+                };
+            }
+
+            const urlRegex =
+                /@([-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)),([-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?))/;
+            match = value.match(urlRegex);
+            if (match) {
+                return {
+                    lat: parseFloat(match[1]),
+                    lng: parseFloat(match[4]),
+                };
+            }
+
+            const qRegex =
+                /[?&]q=([-+]?([1-8]?\d(\.\d+)?|90(\.0+)?)),([-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?))/;
+            match = value.match(qRegex);
+            if (match) {
+                return {
+                    lat: parseFloat(match[1]),
+                    lng: parseFloat(match[4]),
+                };
+            }
+
+            const dataRegex =
+                /!3d([-+]?([1-8]?\d(\.\d+)?|90(\.0+)?))!4d([-+]?(180(\.0+)?|((1[0-7]\d)|([1-9]?\d))(\.\d+)?))/;
+            match = value.match(dataRegex);
+            if (match) {
+                return {
+                    lat: parseFloat(match[1]),
+                    lng: parseFloat(match[5]),
+                };
+            }
+
+            return null;
         },
         markerMoved: function (event) {
             this.geoJsonContains(event.latLng);
