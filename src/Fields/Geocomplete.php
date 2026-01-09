@@ -380,6 +380,14 @@ class Geocomplete extends Field implements CanBeLengthConstrained, HasAffixActio
     {
         parent::setUp();
 
+        $this->registerActions([
+            function (Geocomplete $component): Action {
+                return Action::make('reverseGeocode')->action(function (array $arguments) use ($component) {
+                    $component->reverseGeocodeUpdated($arguments['results'] ?? []);
+                });
+            },
+        ]);
+
         $this->afterStateHydrated(static function (Geocomplete $component, $state) {
             if ($component->getIsLocation()) {
                 if ($component->getGeocodeOnLoad()) {

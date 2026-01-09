@@ -6,6 +6,7 @@ use Cheesegrits\FilamentGoogleMaps\Helpers\FieldHelper;
 use Cheesegrits\FilamentGoogleMaps\Helpers\MapsHelper;
 use Closure;
 use Exception;
+use Filament\Actions\Action;
 use Filament\Forms\Components\Field;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
@@ -14,6 +15,24 @@ use JsonException;
 class Map extends Field
 {
     protected string $view = 'filament-google-maps::fields.filament-google-maps';
+
+    protected function setUp(): void
+    {
+        parent::setUp();
+
+        $this->registerActions([
+            function (Map $component): Action {
+                return Action::make('reverseGeocode')->action(function (array $arguments) use ($component) {
+                    $component->reverseGeocodeUpdated($arguments['results'] ?? []);
+                });
+            },
+            function (Map $component): Action {
+                return Action::make('placeUpdated')->action(function (array $arguments) use ($component) {
+                    $component->placeUpdated($arguments['place'] ?? []);
+                });
+            },
+        ]);
+    }
 
     protected int $precision = 8;
 
@@ -190,8 +209,12 @@ class Map extends Field
      *
      * @return $this
      */
-    public function autocomplete(Closure|string $fieldName, Closure|array $types = [], Closure|string|null $placeField = null, Closure|array $countries = []): static
-    {
+    public function autocomplete(
+        Closure|string $fieldName,
+        Closure|array $types = [],
+        Closure|string|null $placeField = null,
+        Closure|array $countries = [],
+    ): static {
         $this->autocomplete = $fieldName;
         $this->types = $types;
         $this->placeField = $placeField;
@@ -513,8 +536,10 @@ class Map extends Field
      *
      * @return $this
      */
-    public function geoJsonContainsField(Closure|string|null $field = null, Closure|string|null $property = null): static
-    {
+    public function geoJsonContainsField(
+        Closure|string|null $field = null,
+        Closure|string|null $property = null,
+    ): static {
         $this->geoJsonField = $field;
 
         $this->geoJsonProperty = $property;
@@ -677,7 +702,9 @@ class Map extends Field
     {
         $controls = $this->evaluate($this->mapControls);
 
-        return $encode ? json_encode(array_merge($this->controls, $controls), JSON_THROW_ON_ERROR) : array_merge($this->controls, $controls);
+        return $encode
+            ? json_encode(array_merge($this->controls, $controls), JSON_THROW_ON_ERROR)
+            : array_merge($this->controls, $controls);
     }
 
     public function layers(Closure|array $layers): static

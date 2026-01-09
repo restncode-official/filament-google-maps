@@ -211,6 +211,10 @@ export default function filamentGoogleMapsField({
                     this.setCoordinates(this.markerLocation);
                     this.updateFromLocation(this.markerLocation);
                     this.map.panTo(this.markerLocation);
+
+                    if (hasPlaceUpdatedUsing) {
+                        placeUpdatedUsing(place);
+                    }
                 });
             }
 

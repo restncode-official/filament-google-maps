@@ -19,10 +19,19 @@
                         return $wire.get(path)
                     },
                     reverseGeocodeUsing: (results) => {
-                        $wire.reverseGeocodeUsing(@js($statePath), results)
+                        $wire.mountAction(
+                            'reverseGeocode',
+                            { results: results },
+                            { schemaComponent: @js($getKey()) }
+                        )
                     },
                     placeUpdatedUsing: (results) => {
-                        $wire.placeUpdatedUsing(@js($statePath), results)
+                        $wire.mountAction(
+                            'placeUpdated',
+                            { place: results },
+                            { schemaComponent: @js($getKey()) }
+                        )
+                        console.log('placeUpdatedUsing called', results, @js($getKey()));
                     },
                     autocomplete: @js($getAutocompleteId()),
                     autocompleteReverse: @js($getAutocompleteReverse()),

@@ -46,7 +46,7 @@
                             return await $wire.set(path, state)
                         },
                         reverseGeocodeUsing: (results) => {
-                            $wire.reverseGeocodeUsing(@js($statePath), results)
+                            $wire.mountAction('reverseGeocode', { results: results }, { schemaComponent: @js($getKey())})
                         },
                         filterName: @js($getFilterName()),
                         statePath: @js($getStatePath()),
