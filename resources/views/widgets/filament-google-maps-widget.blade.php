@@ -16,7 +16,7 @@
         </x-slot>
 
         @if ($filters)
-            <x-slot name="headerEnd">
+            <x-slot name="afterHeader">
                 <x-filament::input.wrapper
                     inline-prefix
                     wire:target="filter"
